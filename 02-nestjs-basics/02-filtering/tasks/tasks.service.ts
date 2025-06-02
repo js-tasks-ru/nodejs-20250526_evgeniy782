@@ -1,5 +1,5 @@
-import { Injectable } from "@nestjs/common";
-import { Task, TaskStatus } from "./task.model";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { Task, TaskStatus, SortBy } from "./task.model";
 
 @Injectable()
 export class TasksService {
@@ -36,9 +36,44 @@ export class TasksService {
     },
   ];
 
+  private sortedTasksList (listTasks: Task[], sortBy: SortBy): Task[] {
+      return listTasks.sort((taskA, taskB) => {
+          if (taskA[sortBy] > taskB[sortBy]) {
+            return 1;
+          }
+          if (taskA[sortBy] < taskB[sortBy]) {
+            return -1;
+          }
+          return 0;
+        })
+  }
+
   getFilteredTasks(
     status?: TaskStatus,
     page?: number,
     limit?: number,
-  ): Task[] {}
+    sortBy?: SortBy,
+  ): Task[] {
+      let newListTasks = [...this.tasks];
+
+      if(Object.values(TaskStatus).includes(status)) {
+        newListTasks = newListTasks.filter((task) => task.status === status);
+
+        if(!newListTasks.length) {
+          throw new NotFoundException();
+        }
+      }
+
+      if(page && limit) {
+        const startIndex = (page - 1) * limit;
+        const endIndex = startIndex + limit;
+        newListTasks = newListTasks.slice(startIndex, endIndex);
+      }
+
+      if(sortBy) {
+        this.sortedTasksList(newListTasks, sortBy)
+      }
+
+      return newListTasks;
+  }
 }

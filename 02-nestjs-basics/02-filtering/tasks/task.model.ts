@@ -10,3 +10,9 @@ export interface Task {
   description: string;
   status: TaskStatus;
 }
+
+export enum SortBy {
+  TITLE = "title",
+  DESCRIPTION = "description",
+  STATUS = "status",
+}
