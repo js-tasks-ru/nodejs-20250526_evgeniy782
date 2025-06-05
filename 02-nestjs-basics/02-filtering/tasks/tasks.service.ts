@@ -56,7 +56,7 @@ export class TasksService {
   ): Task[] {
       let newListTasks = [...this.tasks];
 
-      if(Object.values(TaskStatus).includes(status)) {
+      if(status) {
         newListTasks = newListTasks.filter((task) => task.status === status);
 
         if(!newListTasks.length) {
@@ -71,7 +71,7 @@ export class TasksService {
       }
 
       if(sortBy) {
-        this.sortedTasksList(newListTasks, sortBy)
+        newListTasks = this.sortedTasksList(newListTasks, sortBy)
       }
 
       return newListTasks;

@@ -11,13 +11,13 @@ export class QueryDto {
     @IsInt()
     @IsNumber()
     @Type(() => Number)
-    page: number;
+    page: number = 1;
 
     @IsOptional()
     @IsInt()
     @IsNumber()
     @Type(() => Number)
-    limit: number;
+    limit: number = 5;
 
     @IsOptional()
     @IsEnum(SortBy)
