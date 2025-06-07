@@ -1,6 +1,7 @@
-import { Controller, Get, Query } from "@nestjs/common";
+import { Controller, Get, Query,  UsePipes, ValidationPipe  } from "@nestjs/common";
 import { TasksService } from "./tasks.service";
-import { TaskStatus } from "./task.model";
+import { TaskStatus, SortBy } from "./task.model";
+import { QueryDto } from './task.dto';
 
 @Controller("tasks")
 export class TasksController {
@@ -8,8 +9,15 @@ export class TasksController {
 
   @Get()
   getTasks(
-    @Query("status") status?: TaskStatus,
-    @Query("page") page?: number,
-    @Query("limit") limit?: number,
-  ) {}
+    @Query() queryParams: QueryDto
+  ) {
+    const { status, page, limit, sortBy } = queryParams;
+
+    return this.tasksService.getFilteredTasks(
+      status,
+      page,
+      limit,
+      sortBy
+    )
+  }
 }
