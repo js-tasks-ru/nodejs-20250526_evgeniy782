@@ -14,7 +14,6 @@ export class TasksService {
       const createdTask = new this.TaskModel(createTaskDto);
       return createdTask.save();
     } catch (error) {
-      // Обработка ошибок, например, уникальности
       throw error;
     }
   }
